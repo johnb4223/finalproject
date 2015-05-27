@@ -20,7 +20,7 @@ import java.awt.event.KeyListener;
 
 // make sure you rename this class if you are doing a copy/paste
 public class FINALPROJECT extends JComponent implements KeyListener {
-
+      
     // Height and Width of our game
     static final int WIDTH = 800;
     static final int HEIGHT = 600;
@@ -38,11 +38,15 @@ public class FINALPROJECT extends JComponent implements KeyListener {
     int gravity = 2;
     int dy = 0;
     
-    //ball 
+    //ball variable
+   Rectangle ball = new Rectangle (390, 290 , 20, 20);
+    
+   int ballDX = 1; //x direction of ball
+   int ballDY = 1;//y direction of ball
+   int ballspeed = 2;
    
     //character variables 
-    
-  
+   
     Rectangle block1L = new Rectangle(0, 40, 450, 25);
     Rectangle block1R = new Rectangle(500, 40, 300, 25);
     Rectangle block2L = new Rectangle(0, 120, 300, 25);
@@ -59,10 +63,11 @@ public class FINALPROJECT extends JComponent implements KeyListener {
         g.clearRect(0, 0, WIDTH, HEIGHT);
         
         // GAME DRAWING GOES HERE 
+        g.setColor(Color.black);
         g.fillRect(0, 0, 800, 600);
         
         g.setColor(Color.RED);
-        
+        g.fillRect(ball.x, ball.y, ball.width, ball.height);
         
         
         
@@ -90,7 +95,41 @@ public class FINALPROJECT extends JComponent implements KeyListener {
             // all your game rules and move is done in here
             // GAME LOGIC STARTS HERE 
             
-           
+             //move the ball
+           // ball.x += ballDX*ballspeed;
+           // ball.y += ballDY*ballspeed;
+            
+            //apply gravity
+            dy = dy + gravity;
+            if(right)
+            {
+               ball.x += 5; 
+            }else if(left)
+            {
+                ball.x -= 5; 
+            }
+            if(jump && !inAir)
+            {
+                dy = -30;
+                inAir = true;
+            }
+            //move player in y direction 
+            ball.y += dy;
+            //player hits the ground
+            if(ball.y > 500)
+            {
+                ball.y = 500; //on the ground
+                dy = 0;
+                inAir = false;
+            }
+            
+            if(ball.intersects(block1L))
+            {
+                handleCollision(ball,block1L);
+            }else if(ball.intersects(block1R))
+            {
+                handleCollision(ball, block1R);
+            }
             
             
     
@@ -182,5 +221,38 @@ public class FINALPROJECT extends JComponent implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         
+    }
+     public void handleCollision (Rectangle player, Rectangle block)
+    {
+        //make the little overlap rectangle
+        Rectangle overlap = player.intersection(block);
+        
+        //handle collision
+        //if the height is bigger
+        //height overpowers width so correct left/right 
+        if(overlap.height > overlap.width)
+        {
+            //player is on the left
+            if(player.x < block.x)
+            {
+                player.x -= overlap.width;
+            }else if(player.x + player.width > block.x + block.width)
+            {
+                player.x += overlap.width;
+            }
+        }else
+        {
+            dy = 0;
+            if (player.y < block.y)
+            {
+                //moves player up to correct 
+                player.y -= overlap.height;
+                // I have landed 
+                inAir = false;
+            }else if (player.y + player.height > block.y + block.height)
+            {
+                player.y += overlap.height;
+            }
+        }
     }
 }
