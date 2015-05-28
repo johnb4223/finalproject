@@ -12,6 +12,8 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 
 /**
  *
@@ -50,8 +52,9 @@ public class FINALPROJECT extends JComponent implements KeyListener {
     Rectangle block1L = new Rectangle(0, 40, 450, 25);
     Rectangle block1R = new Rectangle(500, 40, 300, 25);
     Rectangle block2L = new Rectangle(0, 120, 300, 25);
-    Rectangle block2R = new Rectangle(350, 120, 400, 25);
-
+    Rectangle block2R = new Rectangle(350, 120, 450, 25);
+    Rectangle block3L = new Rectangle(0, 200, 200, 25);
+    
     
     // drawing of the game happens in here
     // we use the Graphics object, g, to perform the drawing
@@ -69,7 +72,11 @@ public class FINALPROJECT extends JComponent implements KeyListener {
         g.setColor(Color.RED);
         g.fillRect(ball.x, ball.y, ball.width, ball.height);
         
-        
+        g.setColor(Color.white);
+        g.fillRect(block1L.x, block1L.y, block1L.width, block1L.height);
+        g.fillRect(block1R.x, block1R.y, block1R.width, block1R.height);
+        g.fillRect(block2L.x, block2L.y, block2L.width, block2L.height);
+        g.fillRect(block2R.x, block2R.y, block2R.width, block2R.height);
         
         // GAME DRAWING ENDS HERE
     }
@@ -116,9 +123,9 @@ public class FINALPROJECT extends JComponent implements KeyListener {
             //move player in y direction 
             ball.y += dy;
             //player hits the ground
-            if(ball.y > 500)
+            if(ball.y > 580)
             {
-                ball.y = 500; //on the ground
+                ball.y = 580; //on the ground
                 dy = 0;
                 inAir = false;
             }
@@ -179,14 +186,20 @@ public class FINALPROJECT extends JComponent implements KeyListener {
         frame.pack();
         // shows the window to the user
         frame.setVisible(true);
-        
+        frame.addKeyListener(game);
+
         // starts my game loop
         game.run();
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
-      int key = e.getKeyCode();
+      
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+         int key = e.getKeyCode();
         if(key == KeyEvent.VK_RIGHT)
         {
             right = true;
@@ -202,8 +215,8 @@ public class FINALPROJECT extends JComponent implements KeyListener {
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
-         int key = e.getKeyCode();
+    public void keyReleased(KeyEvent e) {
+        int key = e.getKeyCode();
         if(key == KeyEvent.VK_RIGHT)
         {
             right = false;
@@ -217,11 +230,7 @@ public class FINALPROJECT extends JComponent implements KeyListener {
             jump = false;
         }
     }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        
-    }
+    
      public void handleCollision (Rectangle player, Rectangle block)
     {
         //make the little overlap rectangle
@@ -232,27 +241,30 @@ public class FINALPROJECT extends JComponent implements KeyListener {
         //height overpowers width so correct left/right 
         if(overlap.height > overlap.width)
         {
-            //player is on the left
-            if(player.x < block.x)
+            //ball is on the left
+            if(ball.x < block.x)
             {
-                player.x -= overlap.width;
-            }else if(player.x + player.width > block.x + block.width)
+                ball.x -= overlap.width;
+            }else if(ball.x + ball.width > block.x + block.width)
             {
-                player.x += overlap.width;
+                ball.x += overlap.width;
             }
         }else
         {
             dy = 0;
-            if (player.y < block.y)
+            if (ball.y < block.y)
             {
                 //moves player up to correct 
-                player.y -= overlap.height;
+                ball.y -= overlap.height;
                 // I have landed 
                 inAir = false;
-            }else if (player.y + player.height > block.y + block.height)
+            }else if (ball.y + ball.height > block.y + block.height)
             {
-                player.y += overlap.height;
+                ball.y += overlap.height;
             }
         }
     }
+
+
+
 }
