@@ -29,11 +29,11 @@ public class FINALPROJECT extends JComponent implements KeyListener {
     
     // sets the framerate and delay for our game
     // you just need to select an approproate framerate
-    long desiredFPS = 60;
+    long desiredFPS = 30;
     long desiredTime = (1000)/desiredFPS;
   
     //controls
-    boolean right = false, left = false, jump = false;
+    boolean right = false, left = false, pause = false, enter = false;
     boolean inAir = false;
     
     // gravity variable and jumping 
@@ -41,19 +41,44 @@ public class FINALPROJECT extends JComponent implements KeyListener {
     int dy = 0;
     
     //ball variable
-   Rectangle ball = new Rectangle (390, 290 , 20, 20);
+   Rectangle ball = new Rectangle (390, 90 , 20, 20);
     
    int ballDX = 1; //x direction of ball
    int ballDY = 1;//y direction of ball
-   int ballspeed = 2;
+   int ballspeed = 5;
+   
+   int score = 0;
+   boolean hasscored = true;
    
     //character variables 
    
-    Rectangle block1L = new Rectangle(0, 40, 450, 25);
-    Rectangle block1R = new Rectangle(500, 40, 300, 25);
-    Rectangle block2L = new Rectangle(0, 120, 300, 25);
-    Rectangle block2R = new Rectangle(350, 120, 450, 25);
+   //1 3 5 6 7 STILL NEED TO ADD THEM TO MAKE THEM MOVE!!!! DO NOT FORGET
+    Rectangle block1L = new Rectangle(0, 40, 100, 25);
+    Rectangle block1M = new Rectangle(150, 40, 200, 25);
+    Rectangle block1R = new Rectangle(400, 40, 650, 25);
+    Rectangle block2L = new Rectangle(0, 120, 50, 25);
+    Rectangle block2M = new Rectangle(100, 120, 350, 25);
+    Rectangle block2R = new Rectangle(500, 120, 400, 25);
     Rectangle block3L = new Rectangle(0, 200, 200, 25);
+    Rectangle block3M = new Rectangle(250, 200, 400, 25);
+    Rectangle block3R = new Rectangle(700, 200, 650, 25);
+    Rectangle block4L = new Rectangle(0, 280, 400, 25);
+    Rectangle block4R = new Rectangle(450, 280, 350, 25);
+    Rectangle block5L = new Rectangle(0, 360, 100, 25);
+    Rectangle block5M = new Rectangle(150, 360, 550, 25);
+    Rectangle block5R = new Rectangle(750, 360, 650, 25);
+    Rectangle block6L = new Rectangle(0, 440, 250, 25);
+    Rectangle block6M = new Rectangle(300, 440, 350, 25);   
+    Rectangle block6R = new Rectangle(700, 440, 750, 25);
+    Rectangle block7L = new Rectangle(0, 520, 200, 25);
+    Rectangle block7M = new Rectangle(250, 520, 200, 25);
+    Rectangle block7R = new Rectangle(500, 520, 850, 25);
+    Rectangle block8L = new Rectangle(0, 600, 400, 25);
+    Rectangle block8R = new Rectangle(450, 600, 350, 25);
+    
+    Rectangle[] blocks = {block1L, block1M, block1R, block2L, block2M, block2R, block3L, block3M, block3R, block4L, block4R, block5L, block5M, block5R, block6L, block6M, block6R, block7L, block7M, block7R, block8L, block8R};
+    
+    int blockmove = 1;
     
     
     // drawing of the game happens in here
@@ -69,15 +94,43 @@ public class FINALPROJECT extends JComponent implements KeyListener {
         g.setColor(Color.black);
         g.fillRect(0, 0, 800, 600);
         
+        //ball
         g.setColor(Color.RED);
         g.fillRect(ball.x, ball.y, ball.width, ball.height);
         
+        //"floors"
         g.setColor(Color.white);
         g.fillRect(block1L.x, block1L.y, block1L.width, block1L.height);
+        g.fillRect(block1M.x, block1M.y, block1M.width, block1M.height);
         g.fillRect(block1R.x, block1R.y, block1R.width, block1R.height);
         g.fillRect(block2L.x, block2L.y, block2L.width, block2L.height);
+        g.fillRect(block2M.x, block2M.y, block2M.width, block2M.height);
         g.fillRect(block2R.x, block2R.y, block2R.width, block2R.height);
+        g.fillRect(block3L.x, block3L.y, block3L.width, block3L.height);
+        g.fillRect(block3M.x, block3M.y, block3M.width, block3M.height);
+        g.fillRect(block3R.x, block3R.y, block3R.width, block3R.height);
+        g.fillRect(block4L.x, block4L.y, block4L.width, block4L.height);
+        g.fillRect(block4R.x, block4R.y, block4R.width, block4R.height);
+        g.fillRect(block5L.x, block5L.y, block5L.width, block5L.height);
+        g.fillRect(block5M.x, block5M.y, block5M.width, block5M.height);
+        g.fillRect(block5R.x, block5R.y, block5R.width, block5R.height);
+        g.fillRect(block6L.x, block6L.y, block6L.width, block6L.height);
+        g.fillRect(block6M.x, block6M.y, block6M.width, block6M.height);
+        g.fillRect(block6R.x, block6R.y, block6R.width, block6R.height);
+        g.fillRect(block7L.x, block7L.y, block7L.width, block7L.height);
+        g.fillRect(block7M.x, block7M.y, block7M.width, block7M.height);
+        g.fillRect(block7R.x, block7R.y, block7R.width, block7R.height);
+        g.fillRect(block8L.x, block8L.y, block8L.width, block8L.height);
+        g.fillRect(block8R.x, block8R.y, block8R.width, block8R.height);
         
+        g.setColor(Color.red);
+        g.drawString("score: " + score, 10, 10);
+        
+        if(ballspeed == 0 && blockmove == 0)
+        {
+            g.drawString("THE END", WIDTH/2, HEIGHT/2);
+            g.drawString("YOUR SCORE IS: " + score, WIDTH/2 - 20, HEIGHT/2 +15);
+        }
         // GAME DRAWING ENDS HERE
     }
     
@@ -106,43 +159,115 @@ public class FINALPROJECT extends JComponent implements KeyListener {
            // ball.x += ballDX*ballspeed;
            // ball.y += ballDY*ballspeed;
             
+            if(!pause)
+            {
             //apply gravity
             dy = dy + gravity;
             if(right)
             {
-               ball.x += 5; 
+               ball.x += ballspeed; 
             }else if(left)
             {
-                ball.x -= 5; 
+                ball.x -= ballspeed; 
             }
-            if(jump && !inAir)
-            {
-                dy = -30;
-                inAir = true;
-            }
+
             //move player in y direction 
             ball.y += dy;
-            //player hits the ground
-            if(ball.y > 580)
+            
+            
+            //moving the block and resetting it down at the bottom 
+            for(int i = 0; i < blocks.length; i++)
             {
-                ball.y = 580; //on the ground
-                dy = 0;
-                inAir = false;
+                blocks[i].y -= blockmove;
+                if(blocks[i].y < 0)
+                {
+                    blocks[i]. y = 640;
+                }
+                
             }
             
-            if(ball.intersects(block1L))
-            {
-                handleCollision(ball,block1L);
-            }else if(ball.intersects(block1R))
-            {
-                handleCollision(ball, block1R);
             }
-            
-            
-    
            
-          
-
+            //stopping the ball at the bottom
+            if(ball.y > 600)
+            {
+                ball.y = 600;
+            }
+            
+            //changing the speed of the floors and ball (changing difficulty) 
+            if(score > 10)
+            {
+                blockmove = 4;
+            }
+            if(score > 20)
+            {
+                blockmove = 2;
+                ballspeed = 9;
+            }
+            if(score > 30)
+            {
+                blockmove = 3;
+                ballspeed = 11;
+            }
+            if(score > 40)
+            {
+                blockmove = 2;
+                ballspeed = 9;
+            }
+            if(score > 50)
+            {
+                blockmove = 3;
+                ballspeed = 7;
+            }
+            if(score > 60)
+            {
+                blockmove = 2;
+                ballspeed = 9;
+            }
+            if(score > 70)
+            {
+                blockmove = 3;
+                ballspeed = 11;
+            }
+            if(score > 80)
+            {
+                blockmove = 2;
+                ballspeed = 9;
+            }
+            if(score > 90)
+            {
+                blockmove = 3;
+                ballspeed = 7;
+            }
+            
+            //ending the game if the ball hits the top of the screen
+              if(ball.y < 0)
+            {
+                blockmove = 0;
+                ballspeed = 0;
+                
+            }
+            //handling the collisions and adding to the score each time it hits the floor          
+            boolean collides = false;
+            for(int i = 0; i < blocks.length; i ++)
+            {
+                if(ball.intersects(blocks[i]))
+                {
+                    collides = true;
+                    if(!hasscored)
+                    {
+                        score ++;
+                        hasscored = true;
+                    }
+                    handleCollision(ball,blocks[i]);
+                    break;
+                }
+            }
+            if(!collides)
+            {
+                hasscored = false;
+            }
+           
             // GAME LOGIC ENDS HERE 
             
             // update the drawing (calls paintComponent)
@@ -210,8 +335,9 @@ public class FINALPROJECT extends JComponent implements KeyListener {
         }
           if(key == KeyEvent.VK_SPACE)
         {
-            jump = true;
-        }  
+            pause = true;           
+        }         
+       
     }
 
     @Override
@@ -225,10 +351,9 @@ public class FINALPROJECT extends JComponent implements KeyListener {
         {
             left = false;
         }
-          if(key == KeyEvent.VK_SPACE)
-        {
-            jump = false;
-        }
+         
+       
+            
     }
     
      public void handleCollision (Rectangle player, Rectangle block)
