@@ -9,6 +9,7 @@ import java.awt.Graphics;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -49,6 +50,8 @@ public class FINALPROJECT extends JComponent implements KeyListener {
    
    int score = 0;
    boolean hasscored = true;
+   
+   Font font1 = new Font("Algerian", Font.PLAIN, 72);
    
     //character variables 
    
@@ -93,11 +96,18 @@ public class FINALPROJECT extends JComponent implements KeyListener {
       // always clear the screen first!
         g.clearRect(0, 0, WIDTH, HEIGHT);
         
-      // MENU
-       g.drawString("PRESS ENTER TO START", WIDTH/2, HEIGHT/2); 
+      // MENU SCREEN 
+       g.setColor(Color.black);
+       g.fillRect(0, 0, 800, 600);
+       g.setColor(Color.red);
+       g.setFont(font1);
+       g.drawString("FALLING DOWN", 300, 200);
+       g.drawString("PRESS ENTER TO START", WIDTH/2 - 70, HEIGHT/2); 
     }
     public void paintComponent(Graphics g)
     {
+        if(enter)
+        {
         // always clear the screen first!
         g.clearRect(0, 0, WIDTH, HEIGHT);
         
@@ -142,8 +152,11 @@ public class FINALPROJECT extends JComponent implements KeyListener {
             g.drawString("THE END", WIDTH/2, HEIGHT/2);
             g.drawString("YOUR SCORE IS: " + score, WIDTH/2 - 20, HEIGHT/2 +15);
         }
+        }else
+        {
+            paintMenuScreen(g);
+        }
         
-       // paintMenuScreen(g);
         
         
         // GAME DRAWING ENDS HERE
@@ -156,12 +169,11 @@ public class FINALPROJECT extends JComponent implements KeyListener {
     {
         // Used to keep track of time used to draw and update the game
         // This is used to limit the framerate later on
-        long startTime;
+        long startTime = 0;
         long deltaTime;
         
         
-        while (!enter)
-        {} 
+        
         
         
         // the main game loop section
@@ -170,6 +182,7 @@ public class FINALPROJECT extends JComponent implements KeyListener {
         boolean done = false; 
         while(!done)
         {
+                        
             // determines when we started so we can keep a framerate
             startTime = System.currentTimeMillis();
             
@@ -181,7 +194,8 @@ public class FINALPROJECT extends JComponent implements KeyListener {
            // ball.y += ballDY*ballspeed;
             
            // everything happens when the game is not paused (space bar is not being held)
-         
+         if(enter)
+         {
             if(!pause)
             {
                 
@@ -212,6 +226,7 @@ public class FINALPROJECT extends JComponent implements KeyListener {
             }
             
             }
+        
            
             //stopping the ball at the bottom
             if(ball.y > 600)
@@ -292,6 +307,8 @@ public class FINALPROJECT extends JComponent implements KeyListener {
             {
                 hasscored = false;
             }
+            
+        }
            
             // GAME LOGIC ENDS HERE 
             
@@ -314,6 +331,7 @@ public class FINALPROJECT extends JComponent implements KeyListener {
                 }catch(Exception e){};
             }
         }
+        
     }
     
     /**
@@ -354,6 +372,7 @@ public class FINALPROJECT extends JComponent implements KeyListener {
         if(key == KeyEvent.VK_ENTER)
         {
             enter = true;
+            
         }
         if(key == KeyEvent.VK_RIGHT)
         {
