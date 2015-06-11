@@ -80,13 +80,13 @@ public class FINALPROJECT extends JComponent implements KeyListener {
     
     int blockmove = 1;
     
-    int screennumber = 0
+    int screennumber = 0;
     
     
     // drawing of the game happens in here
     // we use the Graphics object, g, to perform the drawing
     // NOTE: This is already double buffered!(helps with framerate/speed)
-    @Override
+
     
     public void paintMenuScreen(Graphics g)
     {
@@ -142,6 +142,8 @@ public class FINALPROJECT extends JComponent implements KeyListener {
             g.drawString("THE END", WIDTH/2, HEIGHT/2);
             g.drawString("YOUR SCORE IS: " + score, WIDTH/2 - 20, HEIGHT/2 +15);
         }
+        
+       // paintMenuScreen(g);
         // GAME DRAWING ENDS HERE
     }
     
@@ -155,7 +157,7 @@ public class FINALPROJECT extends JComponent implements KeyListener {
         long startTime;
         long deltaTime;
         
-        PaintMenuScreen();
+        
         while (!enter)
         {} 
         
@@ -346,7 +348,7 @@ public class FINALPROJECT extends JComponent implements KeyListener {
          
         if(key == KeyEvent.VK_ENTER)
         {
-            enter = true
+            enter = true;
         }
         if(key == KeyEvent.VK_RIGHT)
         {
