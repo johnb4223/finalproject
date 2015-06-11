@@ -80,11 +80,22 @@ public class FINALPROJECT extends JComponent implements KeyListener {
     
     int blockmove = 1;
     
+    int screennumber = 0
+    
     
     // drawing of the game happens in here
     // we use the Graphics object, g, to perform the drawing
     // NOTE: This is already double buffered!(helps with framerate/speed)
     @Override
+    
+    public void paintMenuScreen(Graphics g)
+    {
+      // always clear the screen first!
+        g.clearRect(0, 0, WIDTH, HEIGHT);
+        
+      // MENU
+       g.drawString("PRESS ENTER TO START", WIDTH/2, HEIGHT/2); 
+    }
     public void paintComponent(Graphics g)
     {
         // always clear the screen first!
@@ -144,8 +155,14 @@ public class FINALPROJECT extends JComponent implements KeyListener {
         long startTime;
         long deltaTime;
         
+        PaintMenuScreen();
+        while (!enter)
+        {} 
+        
+        
         // the main game loop section
         // game will end if you set done = false;
+        repaint();
         boolean done = false; 
         while(!done)
         {
@@ -159,6 +176,7 @@ public class FINALPROJECT extends JComponent implements KeyListener {
            // ball.x += ballDX*ballspeed;
            // ball.y += ballDY*ballspeed;
             
+           // everything happens when the game is not paused (space bar is not being held)
             if(!pause)
             {
             //apply gravity
@@ -325,6 +343,11 @@ public class FINALPROJECT extends JComponent implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
          int key = e.getKeyCode();
+         
+        if(key == KeyEvent.VK_ENTER)
+        {
+            enter = true
+        }
         if(key == KeyEvent.VK_RIGHT)
         {
             right = true;
@@ -335,8 +358,16 @@ public class FINALPROJECT extends JComponent implements KeyListener {
         }
           if(key == KeyEvent.VK_SPACE)
         {
-            pause = true;           
-        }         
+            if(!pause)
+            {
+                  pause = true;
+            }else
+            {
+                  pause = false;
+            }
+        }  
+          
+       
        
     }
 
