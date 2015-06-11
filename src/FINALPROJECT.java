@@ -144,6 +144,8 @@ public class FINALPROJECT extends JComponent implements KeyListener {
         }
         
        // paintMenuScreen(g);
+        
+        
         // GAME DRAWING ENDS HERE
     }
     
@@ -164,7 +166,7 @@ public class FINALPROJECT extends JComponent implements KeyListener {
         
         // the main game loop section
         // game will end if you set done = false;
-        repaint();
+    
         boolean done = false; 
         while(!done)
         {
@@ -179,8 +181,11 @@ public class FINALPROJECT extends JComponent implements KeyListener {
            // ball.y += ballDY*ballspeed;
             
            // everything happens when the game is not paused (space bar is not being held)
+         
             if(!pause)
             {
+                
+                
             //apply gravity
             dy = dy + gravity;
             if(right)
