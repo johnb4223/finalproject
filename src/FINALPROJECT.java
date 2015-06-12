@@ -51,7 +51,9 @@ public class FINALPROJECT extends JComponent implements KeyListener {
    int score = 0;
    boolean hasscored = true;
    
-   Font font1 = new Font("Algerian", Font.PLAIN, 72);
+   Font font1 = new Font("Broadway", Font.PLAIN, 72);
+   Font font2 = new Font("Lucida Console", Font.PLAIN, 36);
+   Font font3 = new Font("Lucida Console", Font.PLAIN, 20);
    
     //character variables 
    
@@ -101,8 +103,13 @@ public class FINALPROJECT extends JComponent implements KeyListener {
        g.fillRect(0, 0, 800, 600);
        g.setColor(Color.red);
        g.setFont(font1);
-       g.drawString("FALLING DOWN", 300, 200);
-       g.drawString("PRESS ENTER TO START", WIDTH/2 - 70, HEIGHT/2); 
+       g.drawString("FALLING DOWN", 100, 200);
+       g.setFont(font2);
+       g.drawString("PRESS ENTER TO START", 170, HEIGHT/2); 
+       g.setFont(font3);
+       g.drawString("use the left and right keys to move", 180, HEIGHT/2 + 50);
+       g.drawString("use the space bar to pause", 230, HEIGHT/2 + 80);
+       
     }
     public void paintComponent(Graphics g)
     {
